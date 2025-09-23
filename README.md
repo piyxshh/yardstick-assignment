@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Yardstick Notes - Multi-Tenant SaaS Application
 
-## Getting Started
+A full-stack, multi-tenant notes application built for a timed assignment. This project demonstrates a secure, scalable backend with a clean, functional frontend, deployed on Vercel.
 
-First, run the development server:
+**Live URL:** [Your Deployed Vercel URL]
+**Backend Base URL:** [Your Deployed Vercel URL]
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Multi-Tenancy:** Strict data isolation between tenants (e.g., Acme, Globex) using a shared-schema, tenant ID approach.
+- **Authentication:** Secure JWT-based authentication with password hashing (`bcryptjs`).
+- **Authorization:** Two distinct user roles:
+  - **Admin:** Can upgrade the tenant subscription.
+  - **Member:** Can perform CRUD operations on notes.
+- **Subscription Gating:** Tenants on the 'free' plan are limited to 3 notes, while 'pro' plan users have no limit.
+- **RESTful API:** A complete set of CRUD endpoints for managing notes, with all business logic handled on the backend.
+- **Polished UI:** A responsive frontend with professional toast notifications for a smooth user experience.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework:** Next.js (App Router)
+- **Language:** TypeScript
+- **Backend:** Next.js API Routes
+- **Database:** Vercel Postgres (powered by Neon)
+- **Styling:** Tailwind CSS
+- **Deployment:** Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Architectural Decisions
 
-## Deploy on Vercel
+For multi-tenancy, I chose a **shared schema with a `tenant_id` column** on all relevant tables (`users`, `notes`). This approach was selected for its simplicity and efficiency, providing robust data isolation without the overhead of managing multiple schemas or databases, making it ideal for a rapid development cycle.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+All data access is scoped by the `tenant_id` extracted from the user's JWT on the backend, ensuring no data can leak between tenants.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Running Locally
+
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
+   cd your-repo-name
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables:**
+   - Create a `.env.local` file in the root directory.
+   - Add your Vercel Postgres connection string and a JWT secret:
+     ```env
+     POSTGRES_URL="..."
+     JWT_SECRET="..."
+     ```
+
+4. **Set up the database:**
+   - Connect to your Postgres instance and run the schema script located in the `README`.
+   - Run the seed script to populate the database with test users:
+     ```bash
+     node seed.js
+     ```
+
+5. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+   The application will be available at `http://localhost:3000`.

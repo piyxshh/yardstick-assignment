@@ -117,40 +117,40 @@ export default function NotesPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="text-gray-500">Loading notes...</div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-900">
+        <div className="text-gray-400">Loading notes...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900 text-gray-200">
       <div className="max-w-3xl mx-auto p-4 sm:p-6 lg:p-8">
-        <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">My Notes</h1>
-            <button onClick={() => { localStorage.removeItem('authToken'); router.push('/login'); }} className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+        <div className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl font-bold text-white">My Notes</h1>
+            <button onClick={() => { localStorage.removeItem('authToken'); router.push('/'); }} className="text-sm font-medium text-indigo-400 hover:text-indigo-300">
                 Sign out
             </button>
         </div>
         
-        <form onSubmit={handleCreateNote} className="mb-8 bg-white p-4 rounded-lg shadow">
+        <form onSubmit={handleCreateNote} className="mb-8 bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-700">
             <textarea
                 value={newNoteContent}
                 onChange={(e) => setNewNoteContent(e.target.value)}
                 placeholder="What's on your mind?"
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-3 bg-gray-700 text-gray-200 border border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                 rows={3}
             />
-            <button type="submit" className="mt-2 px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+            <button type="submit" className="mt-3 px-5 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                 Add Note
             </button>
         </form>
 
         {limitError && (
-            <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg shadow-sm">
+            <div className="mb-6 p-4 bg-red-900/50 text-red-300 border border-red-700 rounded-lg shadow-lg">
                 <p>{limitError}</p>
                 {limitError.includes('limit') && user?.role === 'admin' && (
-                    <button onClick={handleUpgrade} className="mt-2 px-4 py-2 text-sm font-semibold text-white bg-green-600 rounded-md hover:bg-green-500">
+                    <button onClick={handleUpgrade} className="mt-3 px-4 py-2 text-sm font-semibold text-white bg-green-600 rounded-md hover:bg-green-500">
                         Upgrade to Pro
                     </button>
                 )}
@@ -159,15 +159,15 @@ export default function NotesPage() {
         
         <div className="space-y-4">
             {!isLoading && notes.length === 0 && (
-                <div className="text-center py-10 bg-white rounded-lg shadow">
-                    <p className="text-gray-500">You have no notes yet.</p>
-                    <p className="font-medium text-gray-600 mt-1">Create your first one above!</p>
+                <div className="text-center py-12 bg-gray-800 border border-gray-700 rounded-lg shadow-lg">
+                    <p className="text-gray-400">You have no notes yet.</p>
+                    <p className="font-medium text-gray-300 mt-1">Create your first one above!</p>
                 </div>
             )}
             {notes.map(note => (
-                <div key={note.id} className="bg-white p-4 rounded-lg shadow flex justify-between items-start">
-                    <p className="text-gray-800 break-words whitespace-pre-wrap flex-1">{note.content}</p>
-                    <button onClick={() => handleDeleteNote(note.id)} className="ml-4 text-sm font-medium text-red-600 hover:text-red-500 flex-shrink-0">
+                <div key={note.id} className="bg-gray-800 p-5 rounded-lg shadow-lg border border-gray-700 flex justify-between items-start">
+                    <p className="text-gray-300 break-words whitespace-pre-wrap flex-1">{note.content}</p>
+                    <button onClick={() => handleDeleteNote(note.id)} className="ml-4 text-sm font-medium text-red-500 hover:text-red-400 flex-shrink-0 transition-colors">
                        Delete
                     </button>
                 </div>

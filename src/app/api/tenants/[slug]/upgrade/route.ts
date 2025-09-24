@@ -11,9 +11,12 @@ function getUserFromRequest(req: NextRequest) {
     return JSON.parse(userPayload);
 }
 
-export async function POST(req: NextRequest, { params }: { params: { slug: string } }) {
+export async function POST(
+    req: NextRequest, 
+    { params }: { params: Promise<{ slug: string }> }
+) {
     const user = getUserFromRequest(req);
-    const { slug } = params;
+    const { slug } = await params;
 
     
     if (user.role !== 'admin') {

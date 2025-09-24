@@ -12,13 +12,17 @@ function getUserFromRequest(req: NextRequest) {
 }
 
 // GET /api/notes/:id - Get a single note
-export async function GET(req: NextRequest, context: { params: { id: string } }) {
+export async function GET(
+    req: NextRequest, 
+    { params }: { params: Promise<{ id: string }> }
+) {
     const user = getUserFromRequest(req);
+    const { id } = await params;
     const client = await pool.connect();
     try {
         const result = await client.query(
             'SELECT * FROM notes WHERE id = $1 AND tenant_id = $2',
-            [context.params.id, user.tenantId]
+            [id, user.tenantId]
         );
         if (result.rows.length === 0) {
             return NextResponse.json({ message: 'Note not found' }, { status: 404 });
@@ -30,14 +34,18 @@ export async function GET(req: NextRequest, context: { params: { id: string } })
 }
 
 // PUT /api/notes/:id - Update a note
-export async function PUT(req: NextRequest, context: { params: { id: string } }) {
+export async function PUT(
+    req: NextRequest, 
+    { params }: { params: Promise<{ id: string }> }
+) {
     const user = getUserFromRequest(req);
     const { content } = await req.json();
+    const { id } = await params;
     const client = await pool.connect();
     try {
         const result = await client.query(
             'UPDATE notes SET content = $1, updated_at = NOW() WHERE id = $2 AND tenant_id = $3 RETURNING *',
-            [content, context.params.id, user.tenantId]
+            [content, id, user.tenantId]
         );
         if (result.rows.length === 0) {
             return NextResponse.json({ message: 'Note not found' }, { status: 404 });
@@ -49,13 +57,17 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
 }
 
 // DELETE /api/notes/:id - Delete a note
-export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+export async function DELETE(
+    req: NextRequest, 
+    { params }: { params: Promise<{ id: string }> }
+) {
     const user = getUserFromRequest(req);
+    const { id } = await params;
     const client = await pool.connect();
     try {
         const result = await client.query(
             'DELETE FROM notes WHERE id = $1 AND tenant_id = $2',
-            [context.params.id, user.tenantId]
+            [id, user.tenantId]
         );
         if (result.rowCount === 0) {
             return NextResponse.json({ message: 'Note not found' }, { status: 404 });

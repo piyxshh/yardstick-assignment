@@ -2,8 +2,8 @@
 
 A full-stack, multi-tenant notes application built for a timed assignment. This project demonstrates a secure, scalable backend with a clean, functional frontend, deployed on Vercel.
 
-**Live URL:** [Your Deployed Vercel URL]
-**Backend Base URL:** [Your Deployed Vercel URL]
+**Live URL:** [(https://yardstick-assignment-one.vercel.app/)]
+**Backend Base URL:** [https://yardstick-assignment-one.vercel.app/]
 
 ---
 
@@ -38,37 +38,3 @@ For multi-tenancy, I chose a **shared schema with a `tenant_id` column** on all 
 All data access is scoped by the `tenant_id` extracted from the user's JWT on the backend, ensuring no data can leak between tenants.
 
 ---
-
-## Running Locally
-
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
-   cd your-repo-name
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables:**
-   - Create a `.env.local` file in the root directory.
-   - Add your Vercel Postgres connection string and a JWT secret:
-     ```env
-     POSTGRES_URL="..."
-     JWT_SECRET="..."
-     ```
-
-4. **Set up the database:**
-   - Connect to your Postgres instance and run the schema script located in the `README`.
-   - Run the seed script to populate the database with test users:
-     ```bash
-     node seed.js
-     ```
-
-5. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-   The application will be available at `http://localhost:3000`.

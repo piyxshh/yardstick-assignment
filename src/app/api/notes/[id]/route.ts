@@ -12,14 +12,13 @@ function getUserFromRequest(req: NextRequest) {
 }
 
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, context: { params: { id: string } }) {
     const user = getUserFromRequest(req);
     const client = await pool.connect();
     try {
-        
         const result = await client.query(
             'SELECT * FROM notes WHERE id = $1 AND tenant_id = $2',
-            [params.id, user.tenantId]
+            [context.params.id, user.tenantId]
         );
         if (result.rows.length === 0) {
             return NextResponse.json({ message: 'Note not found' }, { status: 404 });
@@ -31,14 +30,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 }
 
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: { params: { id: string } }) {
     const user = getUserFromRequest(req);
     const { content } = await req.json();
     const client = await pool.connect();
     try {
         const result = await client.query(
             'UPDATE notes SET content = $1, updated_at = NOW() WHERE id = $2 AND tenant_id = $3 RETURNING *',
-            [content, params.id, user.tenantId]
+            [content, context.params.id, user.tenantId]
         );
         if (result.rows.length === 0) {
             return NextResponse.json({ message: 'Note not found' }, { status: 404 });
@@ -50,19 +49,18 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
     const user = getUserFromRequest(req);
     const client = await pool.connect();
     try {
         const result = await client.query(
             'DELETE FROM notes WHERE id = $1 AND tenant_id = $2',
-            [params.id, user.tenantId]
+            [context.params.id, user.tenantId]
         );
-       
         if (result.rowCount === 0) {
             return NextResponse.json({ message: 'Note not found' }, { status: 404 });
         }
-        return new NextResponse(null, { status: 204 }); 
+        return new NextResponse(null, { status: 204 });
     } finally {
         client.release();
     }

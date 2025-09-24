@@ -11,7 +11,7 @@ function getUserFromRequest(req: NextRequest) {
     return JSON.parse(userPayload);
 }
 
-
+// GET /api/notes/:id - Get a single note
 export async function GET(req: NextRequest, context: { params: { id: string } }) {
     const user = getUserFromRequest(req);
     const client = await pool.connect();
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest, context: { params: { id: string } })
     }
 }
 
-
+// PUT /api/notes/:id - Update a note
 export async function PUT(req: NextRequest, context: { params: { id: string } }) {
     const user = getUserFromRequest(req);
     const { content } = await req.json();
@@ -48,7 +48,7 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
     }
 }
 
-
+// DELETE /api/notes/:id - Delete a note
 export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
     const user = getUserFromRequest(req);
     const client = await pool.connect();
